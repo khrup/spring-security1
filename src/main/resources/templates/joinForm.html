@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+    <title>회원가입 페이지</title>
+</head>
+<body>
+<div class="container">
+    <h1>회원가입 페이지</h1>
+    <hr/>
+    <form th:action="|/join|" method="POST">
+        <input type="text" name="username" placeholder="Username" class="form-text"/><br/>
+        <input type="password" name="password" placeholder="Password" class="form-text"><br/>
+        <input type="email" name="email" placeholder="Email" class="form-text"><br/>
+
+        <button class="accordion-button">회원가입</button>
+    </form>
+</div>
+</body>
+</html>

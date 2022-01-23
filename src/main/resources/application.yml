@@ -1,0 +1,30 @@
+spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    livereload:
+      enabled: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/security?serverTimezone=Asia/Seoul
+    username: cos
+    password: cos1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update #create update none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 359070895590-sut0ea0s2qif2pe4jjlkm2o6570u2lu0.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
