@@ -56,9 +56,13 @@ public class IndexController {
         return "index";
     }
 
+    //OAuth 로그인을 해도 PrincipalDetails;
+    //일반 로그인을 해도 PrincipalDetails
+    //@AuthenticationPrincipal 활성화시점은
     @GetMapping("/user")
     @ResponseBody
-    public String user(){
+    public String user(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        log.info("principalDetails = {}", principalDetails.getUser());
         return "user";
     }
 

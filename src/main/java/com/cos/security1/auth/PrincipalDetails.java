@@ -13,18 +13,33 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @Data
 @Slf4j
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user; //콤포지션
+    private Map<String, Object> attributes;
 
+    //일반 로그인
     public PrincipalDetails(User user){
         this.user = user;
+    }
+
+    //OAuth 로그인
+    public PrincipalDetails(User user, Map<String, Object> attributes){
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
     }
 
     //해당 User의 권한을 리턴하는 곳!!
@@ -65,5 +80,10 @@ public class PrincipalDetails implements UserDetails {
         //우리 사이트에서 1년동안 회원이 로그인을 안하면 -> 휴면 계정으로 하기로 함.
         //user.getLoginDtime() , 현재시간 - 로그인 시간 => 1년 초과하면 returen false; 처리
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

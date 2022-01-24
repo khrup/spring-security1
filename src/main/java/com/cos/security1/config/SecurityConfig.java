@@ -1,6 +1,7 @@
 package com.cos.security1.config;
 
 import com.cos.security1.oauth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -11,20 +12,15 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Configuration
 @EnableWebSecurity //스프링 시큐리티 필터가 스프링 필터체인에 등록이 됩니다.
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)//securedEnavled : secured 어노테이션 활성화, prePostEnabled : PreAuthorize, PostAuthorize 어노테이션 활성화
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    PrincipalOauth2UserService principalOauth2UserService;
-
-    //해당 메소드의 리턴되는 오브젝트는 Bean Container에 등록된다.
-    @Bean
-    public BCryptPasswordEncoder encodePwd(){
-        return new BCryptPasswordEncoder();
-    }
+    final private PrincipalOauth2UserService principalOauth2UserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
