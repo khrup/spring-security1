@@ -2,7 +2,12 @@ package com.cos.security1.oauth;
 
 import com.cos.security1.Model.User;
 import com.cos.security1.auth.PrincipalDetails;
+import com.cos.security1.oauth.provider.FaceBookUserInfo;
+import com.cos.security1.oauth.provider.GoogleUserInfo;
+import com.cos.security1.oauth.provider.NaverUserInfo;
+import com.cos.security1.oauth.provider.OAuth2UserInfo;
 import com.cos.security1.repository.UserRepository;
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +17,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -35,8 +42,22 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         log.info("getAttributes = {}",  oauth2User.getAttributes());
 
         //회원가입 강제로 진행
-        String provider = userRequest.getClientRegistration().getClientId(); //google
-        String providerId = oauth2User.getAttribute("sub");
+        OAuth2UserInfo oAuth2UserInfo = null;
+        if(userRequest.getClientRegistration().getRegistrationId().equals("google")){
+            log.info("구글 로그인 요청");
+            oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")){
+            log.info("페이스북 로그인 요청");
+            oAuth2UserInfo = new FaceBookUserInfo(oauth2User.getAttributes());
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            log.info("네이버 로그인 요청");
+            oAuth2UserInfo = new NaverUserInfo((Map<String, Object>)oauth2User.getAttributes().get("response"));
+        }else{
+            log.info("우리는 구글과 페이스북, 네이버만 지원해요 ㅎㅎㅎ");
+        }
+
+        String provider = oAuth2UserInfo.getProvider();//userRequest.getClientRegistration().getClientId(); //google
+        String providerId = oAuth2UserInfo.getProviderId();//oauth2User.getAttribute("sub");
         String username = provider + "_" + providerId; //google_1098125718437
         String password = bCryptPasswordEncoder.encode("1234");
         String email = oauth2User.getAttribute("email");
